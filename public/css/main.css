@@ -13376,3 +13376,9 @@ textarea {
   color: #000 !important; }
   .btn-snapchat:hover, .btn-snapchat:active {
     background-color: #f1ef00; }
+
+.navbar-light .navbar-brand {
+  color: white; }
+
+.navbar-light .navbar-nav .nav-link {
+  color: white; }

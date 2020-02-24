@@ -23,23 +23,18 @@ exports.postContact = (req, res) => {
   let fromName;
   let fromEmail;
   if (!req.user) {
-    if (validator.isEmpty(req.body.name)) validationErrors.push({ msg: 'Please enter your name' });
-    if (!validator.isEmail(req.body.email)) validationErrors.push({ msg: 'Please enter a valid email address.' });
+    if (validator.isEmpty(req.body.name)) validationErrors.push({ msg: 'Veuillez entrer votre nom.' });
+    if (!validator.isEmail(req.body.email)) validationErrors.push({ msg: 'Veuillez entrer votre adresse mail.' });
   }
-  if (validator.isEmpty(req.body.message)) validationErrors.push({ msg: 'Please enter your message.' });
+  if (validator.isEmpty(req.body.message)) validationErrors.push({ msg: 'Veuillez entrer votre message.' });
 
   if (validationErrors.length) {
     req.flash('errors', validationErrors);
     return res.redirect('/contact');
   }
 
-  if (!req.user) {
-    fromName = req.body.name;
-    fromEmail = req.body.email;
-  } else {
-    fromName = req.user.profile.name || '';
-    fromEmail = req.user.email;
-  }
+  fromName = req.body.name;
+  fromEmail = req.body.email;
 
   let transporter = nodemailer.createTransport({
     service: 'SendGrid',

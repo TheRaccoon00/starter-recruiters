@@ -1,0 +1,26 @@
+extends ../layout
+
+block content
+  .pb-2.mt-2.mb-4.border-bottom
+    h3 Mes candidats
+    br
+    table.table.table-hover
+      thead
+        tr
+          th(scope="col") N°
+          th(scope="col") Nom
+          th(scope="col") Prenom
+          th(scope="col") Job recherché
+          th(scope="col") Supprimer
+      tbody
+      - for (var i = 0; i < length; i++){
+        tr
+          th(scope="row") #{i+1}
+          td #{candidates[i].name}
+          td #{candidates[i].firstname} 
+          td #{candidates[i].job_id} 
+          td 
+            button.btn.btn-danger.btn-sm.text-white.text-center.pr-1.ml-3(onclick="delCandidate(" + i + ")")
+              i.fa.fa-trash
+      - }
+    
