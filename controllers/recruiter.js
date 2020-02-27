@@ -1,6 +1,6 @@
 const Candidate = require('../models/Candidate');
 const Job = require('../models/Job');
-
+const UserCandidateRel = require('../models/Job');
 
 /**
 * GET /recruiter
@@ -19,7 +19,7 @@ exports.getCandidates = (req, res) => {
   if (!req.user) {
     return res.redirect('../login');
   }
-  Candidate.find({}, function(err, candidates) {
+  Candidate.find({recruiterid: req.user._id}, function(err, candidates) {
     var candidateMap = {};
     candidates.forEach(function(candidate) {
       candidateMap[candidate._id] = candidate;
@@ -107,7 +107,8 @@ exports.postCandidate = (req, res) => {
   const candidate = new Candidate({
     name: name,
     firstname: first_name,
-    jobid: job_id
+    jobid: job_id,
+    recruiterid: req.user._id
   });
 
   Candidate.findOne({ name: name, firstname: first_name }, (err, existingCandidate) => {
