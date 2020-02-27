@@ -17,10 +17,10 @@ describe('GET /login', () => {
   });
 });
 
-describe('GET /signup', () => {
+describe('GET /contact', () => {
   it('should return 200 OK', (done) => {
     request(app)
-      .get('/signup')
+      .get('/contact')
       .expect(200, done);
   });
 });
