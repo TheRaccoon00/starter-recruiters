@@ -71,12 +71,42 @@ exports.getAddCandidate = (req, res, next) => {
 
     ////// COMPLETER LA BASE DE DONNEES EN TYPE DE JOB POUR LE PREMIER LANCEMENT DE L'APPLICATION
     if (length == 0){
-      const job = new Job({
-        label: "Architecte"
+      var job = new Job({
+        label: "Technologie"
       });
-      job.save((err) => {
-        if (err) throw err;
+      job.save((err) => {});
+      job = new Job({
+        label: "Business"
       });
+      job.save((err) => {});
+      job = new Job({
+        label: "Ventes"
+      });
+      job.save((err) => {});
+      job = new Job({
+        label: "Communication"
+      });
+      job.save((err) => {});
+      job = new Job({
+        label: "Opérations"
+      });
+      job.save((err) => {});
+      job = new Job({
+        label: "Produit"
+      });
+      job.save((err) => {});
+      job = new Job({
+        label: "Marketing"
+      });
+      job.save((err) => {});
+      job = new Job({
+        label: "Agence"
+      });
+      job.save((err) => {});
+      job = new Job({
+        label: "Growth"
+      });
+      job.save((err) => {});
     }
     //////
 
