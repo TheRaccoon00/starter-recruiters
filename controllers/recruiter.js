@@ -1,42 +1,105 @@
 const Candidate = require('../models/Candidate');
+const Job = require('../models/Job');
+
 
 /**
- * GET /
- * Recruiter page.
- */
+* GET /recruiter
+* Redirect to mycandidates
+*/
+exports.redirectRecruiter = (req, res) =>
+{
+  res.redirect('recruiter/mycandidates');
+}
+
+/**
+* GET /recruiter/mycandidates
+* Recruiter page.
+*/
 exports.getCandidates = (req, res) => {
+  if (!req.user) {
+    return res.redirect('../login');
+  }
   Candidate.find({}, function(err, candidates) {
     var candidateMap = {};
     candidates.forEach(function(candidate) {
       candidateMap[candidate._id] = candidate;
     });
+    Job.find({}, function(err, jobs) {
+      var jobMap = {};
+      jobs.forEach(function(job) {
+        jobMap[job._id] = job;
+      });
 
-    var length = Object.values(candidateMap).length;
-    console.log(length)
-    res.render('recruiter/mycandidates', {
+      candidatesArray = Object.values(candidateMap);
+      jobsArray = Object.values(jobMap);
+
+      // ON RECUPERE LES LABEL DES JOBS
+      for (let i = 0; i < candidatesArray.length ; i ++){
+        for (let j = 0; j < jobsArray.length ; j ++){
+          if (candidatesArray[i].jobid == jobsArray[j]._id){
+            candidatesArray[i].job = jobsArray[j].label;
+            break;
+          }
+        }
+      }
+
+      res.render('recruiter/mycandidates', {
+        title: 'Espace recruteur',
+        candidates: candidatesArray,
+        jobs: jobsArray,
+        length: candidatesArray.length
+      });
+    });
+  });
+};
+
+/**
+* GET /recruiter/addcandidate
+* Add candidate page.
+*/
+exports.getAddCandidate = (req, res, next) => {
+  if (!req.user) {
+    return res.redirect('../login');
+  }
+
+  Job.find({}, function(err, jobs) {
+    var jobMap = {};
+    jobs.forEach(function(job) {
+      jobMap[job._id] = job;
+    });
+    var length = Object.values(jobMap).length;
+
+    ////// COMPLETER LA BASE DE DONNEES EN TYPE DE JOB POUR LE PREMIER LANCEMENT DE L'APPLICATION
+    if (length == 0){
+      const job = new Job({
+        label: "Architecte"
+      });
+      job.save((err) => {
+        if (err) throw err;
+      });
+    }
+    //////
+
+    res.render('recruiter/addcandidate', {
       title: 'Espace recruteur',
-      candidates: Object.values(candidateMap),
+      jobs: Object.values(jobMap),
       length: length
     });
   });
 };
 
 /**
- * GET /
- * Recruiter page.
- */
-exports.getAddCandidate = (req, res, next) => {
-  res.render('recruiter/addcandidate', {
-    title: 'Ajouter un candidat'
-  });
-};
-
+* POST /recruiter/addcandidate
+* Add Candidate.
+*/
 exports.postCandidate = (req, res) => {
+  if (!req.user) {
+    return res.redirect('../login');
+  }
   let name;
   let first_name;
   let job_id;
 
-  console.log(req.body);
   name = req.body.name;
   first_name = req.body.firstname;
   job_id = req.body.job;
@@ -54,7 +117,21 @@ exports.postCandidate = (req, res) => {
       return res.redirect('/recruiter/addcandidate');
     }
     candidate.save((err) => {
-        res.render('recruiter/addcandidate');
-      });
+      if (err) throw err;
+      res.render('recruiter/addcandidate');
     });
+  });
 }
+
+/**
+* DELETE /recruiter/deleteCandidate/:id
+* Delete candidate id.
+*/
+exports.deleteCandidate = (req, res) => {
+  const { id } = req.params;
+
+  Candidate.deleteOne({_id:id}  ,function(err,obj){
+    if (err) throw err;
+    res.redirect('../../recruiter/mycandidates');
+  })
+};

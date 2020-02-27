@@ -18,9 +18,11 @@ block content
           th(scope="row") #{i+1}
           td #{candidates[i].name}
           td #{candidates[i].firstname} 
-          td #{candidates[i].job_id} 
+          td #{candidates[i].job} 
           td 
-            button.btn.btn-danger.btn-sm.text-white.text-center.pr-1.ml-3(onclick="delCandidate(" + i + ")")
-              i.fa.fa-trash
+            form(action="/recruiter/deleteCandidate/"+candidates[i]._id method='GET')
+              input(type='hidden', name='_csrf', value=_csrf)
+              button.btn.btn-danger.btn-sm.text-white.text-center.pr-1.ml-3(type="submit")
+                i.fa.fa-trash
       - }
     

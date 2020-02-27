@@ -18,9 +18,10 @@ block content
       .form-group.row
         label(class='col-md-2 col-form-label font-weight-bold', for='job') Job recherché
         .col-md-8
-          select(multiple class="form-control" id="job")
-            option 1 
-            option 2  
+          select(multiple class="form-control" name='job' id='job')
+            - for (var i = 0; i < length; i++){
+              option(value=jobs[i]._id) #{jobs[i].label}
+            - }
       .form-group
         .offset-md-2.col-md-8.p-1
           button.btn.btn-primary(type='submit')

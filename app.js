@@ -137,10 +137,11 @@ app.post('/account/profile', passportConfig.isAuthenticated, userController.post
 app.post('/account/delete', passportConfig.isAuthenticated, userController.postDeleteAccount);
 app.get('/account/unlink/:provider', passportConfig.isAuthenticated, userController.getOauthUnlink);
 
+app.get('/recruiter', recruiterController.redirectRecruiter);
 app.get('/recruiter/mycandidates', recruiterController.getCandidates);
-
 app.get('/recruiter/addcandidate', recruiterController.getAddCandidate);
 app.post('/recruiter/addcandidate', recruiterController.postCandidate);
+app.get('/recruiter/deleteCandidate/:id', recruiterController.deleteCandidate);
 
 /**
  * OAuth authentication routes. (Sign in)
