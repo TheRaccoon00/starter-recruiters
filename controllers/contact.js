@@ -22,10 +22,8 @@ exports.postContact = (req, res) => {
   const validationErrors = [];
   let fromName;
   let fromEmail;
-  if (!req.user) {
-    if (validator.isEmpty(req.body.name)) validationErrors.push({ msg: 'Veuillez entrer votre nom.' });
-    if (!validator.isEmail(req.body.email)) validationErrors.push({ msg: 'Veuillez entrer votre adresse mail.' });
-  }
+  if (validator.isEmpty(req.body.name)) validationErrors.push({ msg: 'Veuillez entrer votre nom.' });
+  if (validator.isEmpty(req.body.email)) validationErrors.push({ msg: 'Veuillez entrer votre adresse mail.' });
   if (validator.isEmpty(req.body.message)) validationErrors.push({ msg: 'Veuillez entrer votre message.' });
 
   if (validationErrors.length) {
@@ -33,56 +31,7 @@ exports.postContact = (req, res) => {
     return res.redirect('/contact');
   }
 
-  fromName = req.body.name;
-  fromEmail = req.body.email;
+  req.flash('errors', { msg: 'Ce formulaire est fake, désolé :/' });
+  return res.redirect('/contact');
 
-  let transporter = nodemailer.createTransport({
-    service: 'SendGrid',
-    auth: {
-      user: process.env.SENDGRID_USER,
-      pass: process.env.SENDGRID_PASSWORD
-    }
-  });
-  const mailOptions = {
-    to: 'your@email.com',
-    from: `${fromName} <${fromEmail}>`,
-    subject: 'Contact Form | Hackathon Starter',
-    text: req.body.message
-  };
-
-  return transporter.sendMail(mailOptions)
-    .then(() => {
-      req.flash('success', { msg: 'Email has been sent successfully!' });
-      res.redirect('/contact');
-    })
-    .catch((err) => {
-      if (err.message === 'self signed certificate in certificate chain') {
-        console.log('WARNING: Self signed certificate in certificate chain. Retrying with the self signed certificate. Use a valid certificate if in production.');
-        transporter = nodemailer.createTransport({
-          service: 'SendGrid',
-          auth: {
-            user: process.env.SENDGRID_USER,
-            pass: process.env.SENDGRID_PASSWORD
-          },
-          tls: {
-            rejectUnauthorized: false
-          }
-        });
-        return transporter.sendMail(mailOptions);
-      }
-      console.log('ERROR: Could not send contact email after security downgrade.\n', err);
-      req.flash('errors', { msg: 'Error sending the message. Please try again shortly.' });
-      return false;
-    })
-    .then((result) => {
-      if (result) {
-        req.flash('success', { msg: 'Email has been sent successfully!' });
-        return res.redirect('/contact');
-      }
-    })
-    .catch((err) => {
-      console.log('ERROR: Could not send contact email.\n', err);
-      req.flash('errors', { msg: 'Error sending the message. Please try again shortly.' });
-      return res.redirect('/contact');
-    });
 };
