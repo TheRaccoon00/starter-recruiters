@@ -159,8 +159,11 @@ exports.postCandidate = (req, res) => {
 * Delete candidate id.
 */
 exports.deleteCandidate = (req, res) => {
-  const { id } = req.params;
+  if (!req.user) {
+    return res.redirect('../login');
+  }
 
+  const { id } = req.params;
   Candidate.deleteOne({_id:id}  ,function(err,obj){
     if (err) throw err;
     res.redirect('../../recruiter/mycandidates');
