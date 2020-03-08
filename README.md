@@ -17,7 +17,7 @@ npm install
 
 ### Google
 
-Put your own Google ID's on the .env.example file.
+Put your own Google ID's on the **.env.example** file.
 
 ### Start
 ```
