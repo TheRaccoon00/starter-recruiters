@@ -1,16 +1,25 @@
 # AppRecruteurs
 
-Une application pensée par les recruteurs, pour les recruteurs.
+Test of web application based on the following project: https://github.com/sahat/hackathon-starter/
 
-## Lancer l'application
+## Requirements
+- MongoDB
+- NodeJS 10+
+- On Debian/Ubuntu: ```sudo apt-get install build-essential```
+
+### Installation
 
 ```
 git clone https://github.com/TheRaccoon00/starter-recruiters.git
 cd starter-recruiters
 npm install
-node app.js
 ```
 
-### A noter
+### Google
 
-Je ne détaille pas le fonctionnement de l'application ni mes choix ici, je pense que ce sera plus simple et plus pertinent lors d'un prochain rendez-vous.
+Put your own Google ID's on the .env.example file.
+
+### Start
+```
+node app.jss
+```
